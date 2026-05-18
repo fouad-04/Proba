@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explication du Cours – Probabilité & Statistique</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Source+Code+Pro:wght@400;600&family=Playfair+Display:wght@700;900&display=swap');
+
+  :root {
+    --bg: #0f0e17;
+    --surface: #1a1830;
+    --card: #221f38;
+    --accent: #e8a838;
+    --accent2: #7c6aff;
+    --accent3: #ff6b6b;
+    --accent4: #4ecdc4;
+    --text: #fffffe;
+    --muted: #a7a9be;
+    --formula-bg: #13111f;
+    --border: rgba(232, 168, 56, 0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Amiri', Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 18px;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 20% 20%, rgba(124,106,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(232,168,56,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper { max-width: 900px; margin: 0 auto; padding: 40px 24px; position: relative; z-index: 1; }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 60px;
+  }
+
+  header .badge {
+    display: inline-block;
+    background: rgba(124,106,255,0.15);
+    border: 1px solid rgba(124,106,255,0.4);
+    color: var(--accent2);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    padding: 6px 18px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    background: linear-gradient(135deg, var(--accent) 0%, #fff 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 16px;
+    font-family: 'Source Code Pro', monospace;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 60px;
+  }
+
+  .toc h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--accent);
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+
+  .toc ol { padding-left: 22px; }
+  .toc li { color: var(--muted); margin-bottom: 8px; font-size: 16px; font-family: 'Source Code Pro', monospace; }
+  .toc a { color: var(--accent2); text-decoration: none; transition: color 0.2s; }
+  .toc a:hover { color: var(--accent); }
+
+  /* Chapter sections */
+  .chapter {
+    margin-bottom: 80px;
+    border-left: 3px solid var(--accent);
+    padding-left: 28px;
+  }
+
+  .chapter-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .chapter-num {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    background: rgba(232,168,56,0.1);
+    border: 1px solid rgba(232,168,56,0.3);
+    padding: 4px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .chapter h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  /* Concept blocks */
+  .concept {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    transition: border-color 0.2s;
+  }
+
+  .concept:hover { border-color: var(--border); }
+
+  .concept h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .concept h3 .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .concept p { color: var(--muted); font-size: 17px; margin-bottom: 12px; }
+  .concept p:last-child { margin-bottom: 0; }
+
+  /* Formula box */
+  .formula {
+    background: var(--formula-bg);
+    border: 1px solid rgba(124,106,255,0.3);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 15px;
+    color: var(--accent2);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* Example box */
+  .example {
+    background: rgba(78,205,196,0.06);
+    border: 1px solid rgba(78,205,196,0.25);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin: 16px 0;
+  }
+
+  .example-label {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--accent4);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .example p { color: #c8f0ee; font-size: 16px; margin-bottom: 8px; }
+
+  /* Key note */
+  .key-note {
+    background: rgba(232,168,56,0.08);
+    border-left: 4px solid var(--accent);
+    padding: 14px 20px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .key-note p { color: #f5d98a; font-size: 16px; }
+
+  /* Darija highlight */
+  .darija {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  /* Table */
+  .table-wrapper { overflow-x: auto; margin: 20px 0; border-radius: 10px; border: 1px solid var(--border); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 14px;
+  }
+
+  th {
+    background: rgba(232,168,56,0.15);
+    color: var(--accent);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 10px 16px;
+    color: var(--muted);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* Tag */
+  .tag {
+    display: inline-block;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+  }
+
+  .tag-blue { background: rgba(124,106,255,0.2); color: var(--accent2); border: 1px solid rgba(124,106,255,0.3); }
+  .tag-orange { background: rgba(232,168,56,0.15); color: var(--accent); border: 1px solid rgba(232,168,56,0.3); }
+  .tag-red { background: rgba(255,107,107,0.15); color: var(--accent3); border: 1px solid rgba(255,107,107,0.3); }
+  .tag-teal { background: rgba(78,205,196,0.15); color: var(--accent4); border: 1px solid rgba(78,205,196,0.3); }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 50px 0;
+  }
+
+  /* Alert */
+  .alert {
+    background: rgba(255,107,107,0.08);
+    border: 1px solid rgba(255,107,107,0.25);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .alert p { color: #ffb3b3; font-size: 15px; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 40px 0 20px;
+    color: var(--muted);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Section sub-heading */
+  .sub-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--accent2);
+    margin: 28px 0 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(124,106,255,0.2);
+  }
+
+  /* Step by step */
+  .steps { counter-reset: step-counter; }
+  .step {
+    counter-increment: step-counter;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .step::before {
+    content: counter(step-counter);
+    min-width: 30px;
+    height: 30px;
+    background: rgba(124,106,255,0.2);
+    border: 1px solid rgba(124,106,255,0.4);
+    color: var(--accent2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 13px;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .step p { color: var(--muted); font-size: 16px; }
+
+  strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="badge">Semestre 2 · Prof. Boukanjime Brahim · 2025–2026</div>
+    <h1>Cours : Probabilité & Statistique</h1>
+    <p>Explication complète en Darija + Français · شرح بالدارجة والفرانساوية</p>
+  </header>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h2>📚 Plan du document</h2>
+    <ol>
+      <li><a href="#ch1">Chapitre 1 – Méthodes de Dénombrement</a></li>
+      <li><a href="#ch2">Chapitre 2 – Tableaux et Graphiques</a></li>
+      <li><a href="#ch3">Chapitre 3 – Paramètres Statistiques</a></li>
+      <li><a href="#ch4-stat">Chapitre 4 (Stat) – Statistique Bivariée</a></li>
+      <li><a href="#ch4-proba">Chapitre 4 (Proba) – Variable Aléatoire Continue</a></li>
+    </ol>
+  </div>
+
+  <!-- ====================== CHAPITRE 1 ====================== -->
+  <section class="chapter" id="ch1">
+    <div class="chapter-header">
+      <span class="chapter-num">CHAPITRE 01</span>
+      <h2>Méthodes de Dénombrement</h2>
+    </div>
+
+    <p style="color:var(--muted); margin-bottom: 28px;">
+      <span class="darija">هذا الفصل كيجاوب على سؤال واحد بسيط:</span> <strong>كم عدد الطرق الممكنة لترتيب أو اختيار عناصر من مجموعة؟</strong><br>
+      En gros : <em>combien de façons peut-on arranger ou choisir des éléments ?</em>
+    </p>
+
+    <!-- Permutations -->
+    <h3 class="sub-heading">1. Permutations (ترتيب جميع العناصر)</h3>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(232,168,56,0.15);">🔀</span> Permutation sans répétition</h3>
+      <p><span class="darija">كنرتبو <strong>جميع</strong> العناصر، وكل عنصر ما يتكررش.</span><br>
+      C'est l'arrangement de <strong>n éléments tous distincts</strong> — chaque élément utilisé une seule fois.</p>
+      <div class="formula">Nombre de permutations = n!  =  n × (n−1) × (n−2) × ... × 1</div>
+      <div class="example">
+        <span class="example-label">مثال concret</span>
+        <p>عندنا <strong>E = {a, b, c}</strong> — 3 أحرف. Combien d'arrangements possibles ?</p>
+        <p>→ <strong>3! = 3×2×1 = 6</strong> arrangements : {abc, acb, bac, bca, cab, cba}</p>
+        <p><span class="darija">تخيل عندك 3 كتب فحياط، كم طريقة تقدر تصفهم؟ الجواب 6 طرق !</span></p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(232,168,56,0.15);">🔄</span> Permutation avec répétition</h3>
+      <p><span class="darija">بعض العناصر متشابهة (متكررة)، فالتبديلات اللي هي نفسها ما تحسبش غير مرة وحدة.</span></p>
+      <div class="formula">Nombre = n! / (n₁! × n₂! × ... × nₖ!)</div>
+      <div class="example">
+        <span class="example-label">مثال : كلمة MISSISSIPPI</span>
+        <p>11 حرف → M=1, I=4, S=4, P=2</p>
+        <p>→ <strong>11! / (4! × 4! × 2!) = 39916800 / 1152 = 34,650</strong> anagrammes</p>
+        <p><span class="darija">الأحرف المتكررة كنقسمو بيهم لأن ترتيبهم فيما بينهم ما كيبدلش الكلمة.</span></p>
+      </div>
+      <div class="example">
+        <span class="example-label">مثال : STATISTIQUE (11 lettres)</span>
+        <p>S=2, T=3, A=1, I=2, Q=1, U=1, E=1</p>
+        <p>→ <strong>11! / (2! × 3! × 2!) = 1,663,200</strong> anagrammes</p>
+      </div>
+    </div>
+
+    <!-- Arrangements -->
+    <h3 class="sub-heading">2. Arrangements (اختيار p عناصر من n مع احترام الترتيب)</h3>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(124,106,255,0.15);">📋</span> Arrangement sans répétition</h3>
+      <p><span class="darija">كناخدو p عنصر من n، وكل عنصر ما يتكررش، <strong>والترتيب مهم</strong>.</span><br>
+      On choisit p éléments parmi n, <strong>l'ordre compte</strong>, sans répétition.</p>
+      <div class="formula">Aₙᵖ = n! / (n − p)!
+
+  Quand p = n : Aₙⁿ = n!</div>
+      <div class="example">
+        <span class="example-label">مثال</span>
+        <p>E = {a, b, c, d} — arrangements d'ordre 2 :</p>
+        <p>→ A⁴₂ = 4! / (4−2)! = 24/2 = <strong>12</strong></p>
+        <p>Sont : {ab, ac, ad, ba, bc, bd, ca, cb, cd, da, db, dc}</p>
+        <p><span class="darija">ab ≠ ba لأن الترتيب مهم — هذا هو الفرق مع الـ combinaison.</span></p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(124,106,255,0.15);">🔁</span> Arrangement avec répétition</h3>
+      <p><span class="darija">كناخدو p عنصر من n، <strong>يمكن نكررو</strong> نفس العنصر، والترتيب مهم.</span></p>
+      <div class="formula">Nombre = nᵖ</div>
+      <div class="example">
+        <span class="example-label">مثال</span>
+        <p>E = {a, b, c, d}, arrangements d'ordre 2 avec répétition :</p>
+        <p>→ 4² = <strong>16</strong> arrangements (يشمل aa, bb, cc, dd...)</p>
+      </div>
+    </div>
+
+    <!-- Combinaisons -->
+    <h3 class="sub-heading">3. Combinaisons (اختيار p عناصر من n — الترتيب ما مهمش)</h3>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(78,205,196,0.15);">🎯</span> Combinaison sans répétition</h3>
+      <p><span class="darija">كناخدو p عنصر من n، الترتيب <strong>ما مهمش</strong>، وكل عنصر ما يتكررش.</span><br>
+      Choisir un groupe, peu importe l'ordre. {a,b} = {b,a} → 1 seul choix.</p>
+      <div class="formula">Cₙᵖ = n! / [p! × (n − p)!]</div>
+      <div class="example">
+        <span class="example-label">مثال عملي</span>
+        <p>كم طريقة باش تختار 3 étudiants من 8 ؟</p>
+        <p>→ C⁸₃ = 8! / (3! × 5!) = 336/6 = <strong>56 groupes</strong></p>
+        <p>كم كوبل ممكن من 10 personnes ؟</p>
+        <p>→ C¹⁰₂ = 10! / (2! × 8!) = 90/2 = <strong>45 couples</strong></p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(78,205,196,0.15);">♻️</span> Combinaison avec répétition</h3>
+      <p><span class="darija">كناخدو p عنصر من n، <strong>يمكن نكررو</strong>، والترتيب ما مهمش.</span></p>
+      <div class="formula">Nombre = Cᵖₙ₊ₚ₋₁</div>
+      <div class="example">
+        <span class="example-label">مثال</span>
+        <p>Combinaisons de 2 éléments de {1,2,3} avec répétition :</p>
+        <p>→ C²₃₊₂₋₁ = C²₄ = 4!/(2!×2!) = <strong>6</strong></p>
+        <p>Sont : {1,1}, {2,2}, {3,3}, {1,2}, {1,3}, {2,3}</p>
+      </div>
+    </div>
+
+    <!-- Principe de multiplication -->
+    <h3 class="sub-heading">4. Principe de Multiplication</h3>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(255,107,107,0.15);">✖️</span> Principe fondamental de comptage</h3>
+      <p><span class="darija">إذا عندك عدة خطوات — كل خطوة عندها عدد من الاختيارات — كنضربو الاختيارات ببعضها.</span></p>
+      <div class="formula">Total = n₁ × n₂ × ... × nf</div>
+      <div class="example">
+        <span class="example-label">مثال الملابس</span>
+        <p>عندو 5 chemises، 2 pantalons، 3 cravates، 4 paires de chaussures</p>
+        <p>→ 5 × 2 × 3 × 4 = <strong>120 tenues</strong> différentes !</p>
+        <p><span class="darija">كل مرة كتلبس، عندك 120 تشكيلة ممكنة 😄</span></p>
+      </div>
+    </div>
+
+    <!-- Résumé tableau -->
+    <h3 class="sub-heading">📊 Tableau Résumé (مهم جدا!)</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Méthode / الطريقة</th>
+            <th>Sans répétition</th>
+            <th>Avec répétition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-blue">Arrangement</span> (الترتيب مهم)</td>
+            <td>Aₙᵖ = n!/(n−p)!</td>
+            <td>nᵖ</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-teal">Combinaison</span> (الترتيب ما مهمش)</td>
+            <td>Cₙᵖ = n!/[p!(n−p)!]</td>
+            <td>Cᵖₙ₊ₚ₋₁</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-orange">Permutation</span> (كل العناصر)</td>
+            <td>n!</td>
+            <td>n!/(n₁!×n₂!×...)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="key-note">
+      <p>⚠️ <strong>كيفاش تفرق؟</strong> — <span class="darija">إذا ab ≠ ba (الترتيب مهم) → Arrangement. إذا ab = ba → Combinaison. إذا كناخدو كل العناصر → Permutation.</span></p>
+    </div>
+
+    <!-- Théorie des ensembles -->
+    <h3 class="sub-heading">5. Théorie des Ensembles (نظرية المجموعات)</h3>
+
+    <div class="concept">
+      <h3>Opérations sur les ensembles / العمليات على المجموعات</h3>
+
+      <div class="steps">
+        <div class="step"><p><strong>Union A ∪ B</strong> — <span class="darija">كل اللي فـ A أو فـ B أو فيهم جوج. = "ou".</span></p></div>
+        <div class="step"><p><strong>Intersection A ∩ B</strong> — <span class="darija">اللي فـ A و فـ B في نفس الوقت. = "et".</span></p></div>
+        <div class="step"><p><strong>Différence A − B</strong> — <span class="darija">اللي فـ A لكن ما هوش فـ B.</span></p></div>
+        <div class="step"><p><strong>Complémentaire Ā</strong> — <span class="darija">كل اللي ما هوش فـ A، من المجموعة الشاملة E.</span></p></div>
+        <div class="step"><p><strong>Ensembles disjoints</strong> — <span class="darija">ما بينهم شي مشترك : A ∩ B = ∅.</span></p></div>
+      </div>
+
+      <div class="formula">Lois de De Morgan :
+  A ∩ B  =  Ā ∪ B̄   (complémentaire d'une intersection = union des complémentaires)
+  A ∪ B  =  Ā ∩ B̄   (complémentaire d'une union = intersection des complémentaires)</div>
+
+      <div class="key-note">
+        <p><strong>Cardinal (العدد) :</strong> Card(A ∪ B) = Card(A) + Card(B) − Card(A ∩ B)</p>
+        <p><span class="darija">كنطرحو التقاطع لأنا حسبناه مرتين!</span></p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ====================== CHAPITRE 2 ====================== -->
+  <section class="chapter" id="ch2">
+    <div class="chapter-header">
+      <span class="chapter-num">CHAPITRE 02</span>
+      <h2>Tableaux Statistiques & Graphiques</h2>
+    </div>
+
+    <p style="color:var(--muted); margin-bottom: 28px;">
+      <span class="darija">هذا الفصل كيعلمنا كيفاش نرتبو البيانات فجداول، وكيفاش نمثلوها بصريا.</span>
+    </p>
+
+    <h3 class="sub-heading">1. Les 4 types de variables statistiques</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>Type</th><th>Description</th><th>مثال</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-blue">Qualitatif Nominal</span></td>
+            <td>Catégories sans ordre</td>
+            <td>ألوان : Bleu, Vert, Rose...</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-orange">Qualitatif Ordinal</span></td>
+            <td>Catégories avec ordre</td>
+            <td>Baccalauréat &lt; Licence &lt; Master &lt; Doctorat</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-teal">Quantitatif Discret</span></td>
+            <td>Valeurs entières comptables</td>
+            <td>عدد الأولاد : 1, 2, 3, 4...</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-red">Quantitatif Continu</span></td>
+            <td>Valeurs dans un intervalle</td>
+            <td>الطول : [160 ; 165[ cm...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub-heading">2. Les colonnes d'un tableau statistique</h3>
+
+    <div class="concept">
+      <h3>Vocabulaire essentiel / المصطلحات الأساسية</h3>
+      <div class="steps">
+        <div class="step"><p><strong>nᵢ</strong> = <span class="darija">العدد (effectif) — كم مرة ظهرت هذه القيمة</span></p></div>
+        <div class="step"><p><strong>fᵢ = nᵢ/n</strong> = <span class="darija">التكرار النسبي (fréquence) — النسبة المئوية</span></p></div>
+        <div class="step"><p><strong>Nᵢ⁺</strong> = <span class="darija">التكرار المتراكم الصاعد — من الأول حتى هنا</span></p></div>
+        <div class="step"><p><strong>Nᵢ⁻</strong> = <span class="darija">التكرار المتراكم النازل — من هنا حتى الأخير</span></p></div>
+        <div class="step"><p><strong>Fᵢ⁺ / Fᵢ⁻</strong> = <span class="darija">نفس الشيء لكن بالنسب (entre 0 et 1)</span></p></div>
+      </div>
+
+      <div class="example">
+        <span class="example-label">مثال : Niveaux d'études (60 personnes)</span>
+        <p>Bac : n=25, f=0.42, N⁺=25, N⁻=60, F⁺=0.42, F⁻=1</p>
+        <p>Licence : n=18, f=0.30, N⁺=43, N⁻=35, F⁺=0.72, F⁻=0.58</p>
+        <p>Master : n=12, f=0.20, N⁺=55, N⁻=17, F⁺=0.92, F⁻=0.28</p>
+        <p>Doctorat : n=5, f=0.08, N⁺=60, N⁻=5, F⁺=1, F⁻=0.08</p>
+        <p><span class="darija">N⁺ كيتراكم صاعد (25→43→55→60) وN⁻ كيتراكم نازل (60→35→17→5).</span></p>
+      </div>
+    </div>
+
+    <h3 class="sub-heading">3. Représentations graphiques</h3>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>Type de variable</th><th>Graphique utilisé</th><th>خاصية</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Qualitative (nominal/ordinal)</td>
+            <td><strong>Diagramme en Barres</strong></td>
+            <td>Rectangles <strong>séparés</strong> (disjoints)</td>
+          </tr>
+          <tr>
+            <td>Qualitative</td>
+            <td><strong>Diagramme à Secteurs</strong> (camembert)</td>
+            <td>Angle α = fᵢ × 360°</td>
+          </tr>
+          <tr>
+            <td>Quantitative Discrète</td>
+            <td><strong>Diagramme en Bâtons</strong></td>
+            <td>Segments (lignes verticales)</td>
+          </tr>
+          <tr>
+            <td>Quantitative Continue</td>
+            <td><strong>Histogramme</strong></td>
+            <td>Rectangles <strong>collés</strong> (juxtaposés)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="key-note">
+      <p>⚠️ <span class="darija">الفرق الكبير بين Barres و Histogramme : الأول مفصول (disjoints) والثاني ملتصق (juxtaposés). في الـ histogramme، الارتفاع = densité = nᵢ/aᵢ (حيث aᵢ هو عرض الفئة).</span></p>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ====================== CHAPITRE 3 ====================== -->
+  <section class="chapter" id="ch3">
+    <div class="chapter-header">
+      <span class="chapter-num">CHAPITRE 03</span>
+      <h2>Paramètres Statistiques</h2>
+    </div>
+
+    <!-- Tendance centrale -->
+    <h3 class="sub-heading">1. Paramètres de Tendance Centrale (قيمة مركزية تمثل السلسلة)</h3>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(232,168,56,0.15);">🎯</span> Le Mode (M₀) — القيمة الأكثر تكرارا</h3>
+      <p><span class="darija">هو القيمة اللي تكررت أكثر من غيرها. كيمكن يكون عندنا mode واحد (unimodale)، جوج (bimodale)، أو أكثر (multimodale).</span></p>
+
+      <div class="example">
+        <span class="example-label">مثال — Cas discret</span>
+        <p>عدد الأولاد : 1(12 مرة), 2(40 مرة), 3(32 مرة), 4(16 مرة)</p>
+        <p>→ Mode M₀ = <strong>2</strong> (كتر واحد تكرر)</p>
+      </div>
+
+      <p style="margin-top:14px;"><strong>Cas continu (variable continue) :</strong><br>
+      <span class="darija">كنحسبو المود من الـ histogramme أو بالفورمولا :</span></p>
+      <div class="formula">M₀ = x_{i-1} + [d₁/(d₁+d₂)] × (xᵢ − x_{i-1})
+
+  où  d₁ = hᵢ − h_{i-1}  et  d₂ = hᵢ − h_{i+1}</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(78,205,196,0.15);">⚖️</span> La Médiane (Me) — نقطة المنتصف</h3>
+      <p><span class="darija">هي القيمة اللي تقسم السلسلة لنصفين متساويين — 50% قبلها و50% بعدها.</span></p>
+
+      <h4 style="color:var(--muted); margin: 14px 0 8px; font-size:15px;">Cas d'une série brute :</h4>
+      <div class="formula">Si n impair → Médiane = valeur de rang (n+1)/2
+  Si n pair  → Médiane = moyenne des valeurs de rangs n/2 et n/2+1</div>
+
+      <div class="example">
+        <span class="example-label">مثال بسيط</span>
+        <p>Série : 2, 4, 5, 7, 9 → n=5 (impair) → rang (5+1)/2 = 3 → Me = <strong>5</strong></p>
+        <p>Série : 2, 4, 5, 7 → n=4 (pair) → Me = (4+5)/2 = <strong>4.5</strong></p>
+      </div>
+
+      <h4 style="color:var(--muted); margin: 14px 0 8px; font-size:15px;">Cas discret (tableau) — نستعملو F⁺ :</h4>
+      <div class="key-note">
+        <p>• إذا ما كانش F⁺ = 0.5 → Me = الـ modalité اللي F⁺ ديالها أكبر من 0.5 مباشرة.</p>
+        <p>• إذا كان F⁺ = 0.5 → Me = مركز الفترة [x_F0.5 , x_{suivant}]</p>
+      </div>
+
+      <h4 style="color:var(--muted); margin: 14px 0 8px; font-size:15px;">Cas continu (interpolation linéaire) :</h4>
+      <div class="formula">Me = x_{i-1} + [(0.5 − F⁺_{i-1}) / (F⁺ᵢ − F⁺_{i-1})] × (xᵢ − x_{i-1})</div>
+      <p><span class="darija">كنفتشو على الفئة اللي فيها F⁺ ≥ 0.5 الأول، وكندخلو بالـ interpolation.</span></p>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(124,106,255,0.15);">📊</span> Les Moyennes</h3>
+
+      <p style="margin-bottom:10px;"><span class="tag tag-blue">Arithmétique x̄</span> — الأكثر استعمالا</p>
+      <div class="formula">x̄ = (1/n) × Σ nᵢxᵢ = Σ fᵢxᵢ</div>
+      <p style="color:var(--muted); font-size:15px;margin-bottom:16px;"><span class="darija">كنضربو كل قيمة في تكرارها ونجمعو ونقسمو على المجموع.</span></p>
+
+      <p style="margin-bottom:10px;"><span class="tag tag-teal">Géométrique G</span> — للتغيرات النسبية (croissance %)</p>
+      <div class="formula">G = ⁿ√(x₁ⁿ¹ × x₂ⁿ² × ... × xₖⁿᵏ)
+  ln(G) = (1/n) Σ nᵢ ln(xᵢ)</div>
+
+      <p style="margin-bottom:10px;"><span class="tag tag-orange">Harmonique H</span> — للسرعات والتدفقات</p>
+      <div class="formula">H = n / Σ(nᵢ/xᵢ)</div>
+
+      <p style="margin-bottom:10px;"><span class="tag tag-red">Quadratique Q</span></p>
+      <div class="formula">Q = √[(1/n) × Σ nᵢxᵢ²]</div>
+
+      <div class="key-note">
+        <p><span class="darija">للمتغير المستمر (classes) : كنبدلو xᵢ بـ cᵢ (مركز الفئة) = (xᵢ₋₁ + xᵢ)/2</span></p>
+      </div>
+    </div>
+
+    <!-- Quantiles -->
+    <h3 class="sub-heading">2. Quantiles (Quartiles, Déciles, Centiles)</h3>
+
+    <div class="concept">
+      <h3>القسم النسبي للسلسلة</h3>
+      <p><span class="darija">الـ quantiles كيقسمو السلسلة المرتبة لأجزاء متساوية.</span></p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Quantile</th><th>Division</th><th>Nombre</th><th>Seuil cherché</th></tr></thead>
+          <tbody>
+            <tr><td>Quartiles Q₁,Q₂,Q₃</td><td>4 parties de 25%</td><td>3</td><td>0.25, 0.50, 0.75</td></tr>
+            <tr><td>Déciles D₁...D₉</td><td>10 parties de 10%</td><td>9</td><td>0.1, 0.2, ..., 0.9</td></tr>
+            <tr><td>Centiles C₁...C₉₉</td><td>100 parties de 1%</td><td>99</td><td>0.01, 0.02, ..., 0.99</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="key-note">
+        <p><span class="darija">نفس طريقة حساب الـ médiane، غير بدل 0.5 كنستعملو الحد المطلوب. مثلا Q₁ → كنفتشو على 0.25 فـ F⁺.</span></p>
+      </div>
+    </div>
+
+    <!-- Dispersion -->
+    <h3 class="sub-heading">3. Paramètres de Dispersion (قياس التشتت)</h3>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(255,107,107,0.15);">📏</span> L'Étendue (e)</h3>
+      <p><span class="darija">الفرق بين أكبر قيمة وأصغر قيمة — بسيطة لكن حساسة للقيم الشاذة.</span></p>
+      <div class="formula">e = xmax − xmin</div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(255,107,107,0.15);">📐</span> Écart Interquartile (EIQ)</h3>
+      <div class="formula">EIQ = Q₃ − Q₁</div>
+      <p><span class="darija">الفترة [Q₁, Q₃] تحتوي على 50% من البيانات. EIQ هو عرضها — أفضل من الـ étendue لأنه ما يتأثرش بالقيم الشاذة.</span></p>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(255,107,107,0.15);">📉</span> Variance V(X) والانحراف المعياري σ</h3>
+      <p><span class="darija">الـ variance هو معدل مربعات الانحرافات عن المتوسط. الـ écart-type هو جذره التربيعي — وهو بنفس وحدة القياس.</span></p>
+      <div class="formula">V(X) = (1/n) Σ nᵢ(xᵢ − x̄)²   =   Σ fᵢ(xᵢ − x̄)²
+
+  Formule de König-Huygens (pratique) :
+  V(X) = [(1/n) Σ nᵢxᵢ²] − x̄²
+
+  σ(X) = √V(X)</div>
+      <div class="example">
+        <span class="example-label">مثال — عدد الأولاد لـ 100 عائلة</span>
+        <p>x̄ = 252/100 = 2.52 — V(X) = 716/100 − (2.52)² = 7.16 − 6.35 = 0.81</p>
+        <p>→ σ = √0.81 = <strong>0.9 ≈ 1 enfant</strong></p>
+        <p><span class="darija">يعني عدد الأولاد كيبعد على المعدل بـ طفل واحد في المتوسط.</span></p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(255,107,107,0.15);">📊</span> Coefficient de Variation (CV)</h3>
+      <p><span class="darija">كيقارن تشتت توزيعات مختلفة — بلا وحدة قياس.</span></p>
+      <div class="formula">CV = σ / x̄
+
+  Si CV < 0.5 → dispersion FAIBLE (البيانات متمركزة حول المتوسط)
+  Si CV > 0.5 → dispersion IMPORTANTE (البيانات متفرقة)</div>
+      <div class="example">
+        <span class="example-label">مثال — poids des nourrissons (47 bébés)</span>
+        <p>x̄ = 3.48 kg, σ = 0.40 kg → CV = 0.40/3.48 = <strong>0.115</strong> &lt; 0.5</p>
+        <p><span class="darija">تشتت ضعيف → الأوزان متمركزة حول 3.48 kg 👶</span></p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ====================== CHAPITRE 4 STAT ====================== -->
+  <section class="chapter" id="ch4-stat">
+    <div class="chapter-header">
+      <span class="chapter-num">CHAPITRE 04 — STAT</span>
+      <h2>Statistique Descriptive Bivariée</h2>
+    </div>
+
+    <p style="color:var(--muted); margin-bottom: 28px;">
+      <span class="darija">هنا مانستعملوش متغير واحد، بل متغيرين X و Y في نفس الوقت، ونشوفو إذا كان بينهم علاقة.</span>
+    </p>
+
+    <div class="concept">
+      <h3>Nuage de points / سحابة النقط</h3>
+      <p><span class="darija">كل فرد من مجتمعنا كيعطينا نقطة (xᵢ, yᵢ) فالمستوى. مجموع النقاط هو الـ nuage de points.</span></p>
+      <div class="example">
+        <span class="example-label">أمثلة عملية</span>
+        <p>• X = عدد الأولاد، Y = عدد الغرف في البيت (200 أسرة)</p>
+        <p>• X = دخل شهري، Y = مصاريف شهرية (20 أسرة)</p>
+        <p>• X = ساعات الدراسة، Y = النقطة على 20 (100 طالب)</p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3>Covariance — cov(X,Y)</h3>
+      <p><span class="darija">تقيس اتجاه العلاقة بين X وY — هل يتزايدان معا أم بشكل معكوس؟</span></p>
+      <div class="formula">COV(X,Y) = (1/n) Σ (xᵢ − x̄)(yᵢ − ȳ)
+
+  Formule pratique (König-Huygens) :
+  COV(X,Y) = [(1/n) Σ xᵢyᵢ] − x̄ȳ</div>
+      <div class="key-note">
+        <p>• COV &gt; 0 → <span class="darija">Y كيكبر مع X (علاقة موجبة)</span></p>
+        <p>• COV &lt; 0 → <span class="darija">Y كيصغر مع X (علاقة عكسية)</span></p>
+        <p>• COV = 0 → <span class="darija">ما كاينش علاقة خطية</span></p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3>Coefficient de corrélation linéaire ρ(X,Y)</h3>
+      <p><span class="darija">يقيس قوة العلاقة الخطية بين X وY — بين -1 و+1.</span></p>
+      <div class="formula">ρ(X,Y) = COV(X,Y) / [σ(X) × σ(Y)]
+
+  −1 ≤ ρ ≤ +1
+
+  ρ = +1  → علاقة خطية تامة موجبة (النقاط على خط مستقيم صاعد)
+  ρ = −1  → علاقة خطية تامة عكسية (خط نازل)
+  ρ ≈ 0   → لا توجد علاقة خطية</div>
+      <div class="example">
+        <span class="example-label">مثال — 12 clients (articles X, visites Y)</span>
+        <p>→ ρ(X,Y) = <strong>0.932</strong> ≈ 1 — علاقة خطية قوية جدا !</p>
+        <p><span class="darija">كلما زاد عدد الزيارات، زاد عدد المشتريات — منطقي 😄</span></p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3>Droite de régression linéaire (Y = aX + b)</h3>
+      <p><span class="darija">إذا العلاقة خطية، كنحسبو معادلة الخط اللي أقرب نقط من كل النقاط — طريقة المربعات الصغرى (MMC).</span></p>
+      <div class="formula">a = COV(X,Y) / V(X)      ← الميل (pente)
+
+  b = ȳ − a × x̄            ← الثابت (ordonnée à l'origine)</div>
+      <div class="example">
+        <span class="example-label">مثال — Taille X et Poids Y</span>
+        <p>x̄=158, ȳ=58, σx=σy=4.58, COV=21, ρ=1</p>
+        <p>a = 21/V(X) = 1,  b = 58 − 1×158 = <strong>−100</strong></p>
+        <p>→ Droite : <strong>Y = X − 100</strong></p>
+        <p><span class="darija">يعني لكل cm زيادة فالطول، الوزن يزيد بـ 1 kg.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ====================== CHAPITRE 4 PROBA ====================== -->
+  <section class="chapter" id="ch4-proba">
+    <div class="chapter-header">
+      <span class="chapter-num">CHAPITRE 04 — PROBA</span>
+      <h2>Variable Aléatoire Continue</h2>
+    </div>
+
+    <p style="color:var(--muted); margin-bottom: 28px;">
+      <span class="darija">هنا المتغير العشوائي ما عندوش قيم محددة — يمكن يأخذ أي قيمة فـ فترة [a,b].</span>
+    </p>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(124,106,255,0.15);">📈</span> Densité de probabilité f(x)</h3>
+      <p><span class="darija">بدل احتمال كل قيمة، عندنا دالة f كتصف "كثافة" الاحتمال. شروطها 3 :</span></p>
+      <div class="steps">
+        <div class="step"><p>f(x) ≥ 0 لكل x ∈ ℝ (موجبة دائما)</p></div>
+        <div class="step"><p>f مستمرة (إلا ربما في عدد منتهي من النقاط)</p></div>
+        <div class="step"><p>∫₋∞^{+∞} f(x)dx = 1 (المساحة الكلية = 1)</p></div>
+      </div>
+      <div class="example">
+        <span class="example-label">مثال — إيجاد الثابت a</span>
+        <p>f(x) = ax² إذا −1 ≤ x ≤ 1، وإلا f(x)=0</p>
+        <p>∫₋₁¹ ax²dx = 1 → a[x³/3]₋₁¹ = 1 → 2a/3 = 1 → <strong>a = 3/2</strong></p>
+        <p><span class="darija">كنحسبو التكامل ونساويه بـ 1 باش نلقاو الثابت.</span></p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(124,106,255,0.15);">📊</span> Fonction de répartition F(x)</h3>
+      <p><span class="darija">F(x) = P(X ≤ x) — الاحتمال أن X يكون أصغر أو يساوي x.</span></p>
+      <div class="formula">F(x) = P(X ≤ x) = ∫₋∞ˣ f(t)dt
+
+  Propriétés :
+  • F est croissante de 0 à 1
+  • P(a &lt; X ≤ b) = F(b) − F(a)
+  • P(X > a) = 1 − F(a)
+  • f(x) = F'(x)  ← densité = dérivée de la répartition</div>
+      <div class="example">
+        <span class="example-label">مثال — حساب احتمالات</span>
+        <p>بالمثال السابق : F(x) = ½(x³+1) إذا −1≤x≤1</p>
+        <p>P(X ≤ 0.25) = F(0.25) = ½((0.25)³+1) = <strong>≈ 0.508</strong></p>
+        <p>P(−0.5 &lt; X ≤ 0.75) = F(0.75)−F(−0.5) = <strong>≈ 0.273</strong></p>
+      </div>
+    </div>
+
+    <div class="concept">
+      <h3><span class="icon" style="background:rgba(78,205,196,0.15);">🧮</span> Espérance E(X) et Variance V(X)</h3>
+      <div class="formula">E(X) = ∫₋∞^{+∞} x·f(x)dx       ← المتوسط (moyenne)
+
+  V(X) = E(X²) − [E(X)]²
+  où E(X²) = ∫₋∞^{+∞} x²·f(x)dx
+
+  σ(X) = √V(X)</div>
+      <div class="example">
+        <span class="example-label">مثال — f(x) = (3/2)x²</span>
+        <p>E(X) = ∫₋₁¹ x·(3/2)x²dx = ∫₋₁¹ (3/2)x³dx = <strong>0</strong> (دالة فردية)</p>
+        <p>E(X²) = ∫₋₁¹ x²·(3/2)x²dx = (3/2)[x⁵/5]₋₁¹ = 3/5</p>
+        <p>V(X) = 3/5 − 0² = <strong>0.6</strong> — σ = √0.6 ≈ 0.775</p>
+      </div>
+    </div>
+
+    <!-- Loi Normale -->
+    <h3 class="sub-heading">🔔 Loi Normale (Gaussienne) — الأهم !</h3>
+
+    <div class="concept">
+      <h3>Définition N(m, σ²)</h3>
+      <p><span class="darija">الأكثر استعمالا في الإحصاء. شكلها جرس (cloche). تعتمد على متوسط m وانحراف معياري σ.</span></p>
+      <div class="formula">f(x) = (1/σ√2π) × exp[−(x−m)²/(2σ²)]
+
+  E(X) = m     (المتوسط)
+  V(X) = σ²    (التباين)
+  σ(X) = σ     (الانحراف المعياري)</div>
+    </div>
+
+    <div class="concept">
+      <h3>Loi Normale Centrée Réduite N(0,1)</h3>
+      <p><span class="darija">هي الحالة الخاصة حيث m=0 وσ=1. نستعملوها بالجداول.</span></p>
+      <div class="formula">f(x) = (1/√2π) × exp(−x²/2)
+
+  Propriété clé : F(−a) = 1 − F(a)</div>
+
+      <div class="key-note">
+        <p><strong>Standardisation (التحويل) :</strong> إذا X ~ N(m, σ²)، فـ Z = (X−m)/σ ~ N(0,1)</p>
+        <p><span class="darija">كنبدلو أي لوا نورمال لـ N(0,1) وكنستعملو الجدول.</span></p>
+      </div>
+
+      <div class="example">
+        <span class="example-label">مثال — عدد الزبائن يوميا X ~ N(360, 40)</span>
+        <p>P(X &lt; 300) = P(Z &lt; (300−360)/40) = P(Z &lt; −1.5) = 1 − F(1.5)</p>
+        <p>P(X &gt; 440) = P(Z &gt; (440−360)/40) = P(Z &gt; 2) = 1 − F(2)</p>
+        <p>P(300 &lt; X &lt; 440) = F(2) − F(−1.5) = F(2) − (1−F(1.5))</p>
+        <p><span class="darija">الجواب الدقيق كيجي من جدول N(0,1).</span></p>
+      </div>
+    </div>
+
+    <div class="alert">
+      <p>⚡ <strong>Étapes pour calculer P(a ≤ X ≤ b) avec X ~ N(m,σ²) :</strong><br>
+      1. Standardiser : Z = (X−m)/σ<br>
+      2. Réécrire en termes de Z<br>
+      3. Utiliser la table N(0,1) et la propriété F(−a)=1−F(a)<br>
+      <span class="darija">4. هذه الخطوات الثلاث كافية لحل أي مسألة لوا نورمال !</span></p>
+    </div>
+  </section>
+
+  <footer>
+    Prof. Boukanjime Brahim · Probabilité & Statistique · Semestre 2 · 2025–2026<br>
+    <span style="color: rgba(167,169,190,0.4);">Explication pédagogique en Darija + Français</span>
+  </footer>
+
+</div>
+</body>
+</html>
